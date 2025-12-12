@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useActionState, useState } from 'react';
+import { useActionState, useState, useEffect } from 'react';
 import { useFormStatus } from 'react-dom';
 import { register } from '../actions';
 import { Button } from '@/components/ui/button';
@@ -51,6 +51,36 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isUsernameValid, setIsUsernameValid] = useState(false);
+  const [emailChecking, setEmailChecking] = useState(false);
+  const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkEmail = async () => {
+      if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        setEmailAvailable(null);
+        return;
+      }
+
+      setEmailChecking(true);
+      try {
+        const res = await fetch('/api/check-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: formData.email }),
+        });
+        const data = await res.json();
+        setEmailAvailable(data.available);
+      } catch (error) {
+        console.error('Email check failed:', error);
+        setEmailAvailable(null);
+      } finally {
+        setEmailChecking(false);
+      }
+    };
+
+    const timer = setTimeout(checkEmail, 500);
+    return () => clearTimeout(timer);
+  }, [formData.email]);
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors };
@@ -171,9 +201,21 @@ export default function RegisterPage() {
                   {errors.email}
                 </p>
               )}
-              <p className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
-                📧 Unesite vašu email adresu (npr. ime.prezime@student.hr)
-              </p>
+              {emailChecking && (
+                <p className="text-xs text-gray-500 dark:text-gray-400">Provjera dostupnosti...</p>
+              )}
+              {emailAvailable === false && !emailChecking && (
+                <p className="text-xs text-red-500 flex items-center gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  Email je već registriran
+                </p>
+              )}
+              {emailAvailable === true && !emailChecking && (
+                <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Email je dostupan
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -197,8 +239,8 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-              <p className="text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg">
-                👤 Korisničko ime (NE email): 3-20 znakova, počinje slovom, samo slova, brojevi, _ i -
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                3-20 znakova, počinje slovom
               </p>
             </div>
 

@@ -5,7 +5,9 @@
       "Bash(npm uninstall:*)",
       "Bash(find:*)",
       "Bash(npm run build:*)",
-      "WebFetch(domain:www.aaiedu.hr)"
+      "WebFetch(domain:www.aaiedu.hr)",
+      "WebSearch",
+      "WebFetch(domain:django-aaieduhr.readthedocs.io)"
     ],
     "deny": [],
     "ask": []

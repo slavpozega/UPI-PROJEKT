@@ -1,0 +1,10 @@
+# Node/Next build artifacts
+.next/
+node_modules/
+
+# Local environment files
+.env.local
+.env*
+
+# Supabase local CLI temp files (project-specific)
+projects/trikostura-jpavic-mlistes-djsartori/supabase/.temp/

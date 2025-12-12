@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { SkriptaLogo } from "@/components/branding/skripta-logo";
+import { TestimonialSlider } from "@/components/testimonial-slider";
 import { MessageSquare, Users, BookOpen, Lightbulb, TrendingUp, Award, ArrowRight, Sparkles } from "lucide-react";
 
 // Metadata for SEO
@@ -246,55 +247,7 @@ export default function Home() {
           Pridruži se tisućama zadovoljnih studenata
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border-2 border-gray-100 dark:border-gray-700">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                M
-              </div>
-              <div className="ml-3">
-                <div className="font-bold text-gray-900 dark:text-white">Marko</div>
-                <div className="text-sm text-gray-500">FER Zagreb</div>
-              </div>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 italic">
-              "Skripta mi je pomogla proći najteže kolegije. Odgovori zajednice su bili brži i korisniji od čekanja profesora."
-            </p>
-            <div className="mt-4 text-yellow-500">⭐⭐⭐⭐⭐</div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border-2 border-gray-100 dark:border-gray-700">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                A
-              </div>
-              <div className="ml-3">
-                <div className="font-bold text-gray-900 dark:text-white">Ana</div>
-                <div className="text-sm text-gray-500">PMF Split</div>
-              </div>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 italic">
-              "Konačno mjesto gdje mogu pronaći materijale i savjete od studenata koji su prošli iste ispite. Nezamjenjivo!"
-            </p>
-            <div className="mt-4 text-yellow-500">⭐⭐⭐⭐⭐</div>
-          </div>
-
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-xl border-2 border-gray-100 dark:border-gray-700">
-            <div className="flex items-center mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">
-                L
-              </div>
-              <div className="ml-3">
-                <div className="font-bold text-gray-900 dark:text-white">Luka</div>
-                <div className="text-sm text-gray-500">EFZG</div>
-              </div>
-            </div>
-            <p className="text-gray-600 dark:text-gray-400 italic">
-              "Upoznao sam kolege s drugih fakulteta i našao studijsku grupu. Zajednica je stvarno prijateljska i susretljiva!"
-            </p>
-            <div className="mt-4 text-yellow-500">⭐⭐⭐⭐⭐</div>
-          </div>
-        </div>
+        <TestimonialSlider />
       </div>
 
       {/* FAQ */}

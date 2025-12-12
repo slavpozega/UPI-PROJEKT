@@ -91,7 +91,13 @@ export default function TermsPage() {
             variant="outline" 
             size="lg" 
             className="gap-2"
-            onClick={() => router.back()}
+            onClick={() => {
+              if (window.history.length > 1) {
+                router.back();
+              } else {
+                window.close();
+              }
+            }}
           >
             <ArrowLeft className="w-4 h-4" />
             Natrag

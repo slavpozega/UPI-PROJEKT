@@ -340,11 +340,11 @@ export default function RegisterPage() {
                 className="text-xs font-normal cursor-pointer select-none leading-tight"
               >
                 Slažem se s{' '}
-                <Link href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                <Link href="/terms" className="text-primary hover:underline">
                   Uvjetima korištenja
                 </Link>{' '}
                 i{' '}
-                <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                <Link href="/privacy" className="text-primary hover:underline">
                   Politikom privatnosti
                 </Link>
               </Label>

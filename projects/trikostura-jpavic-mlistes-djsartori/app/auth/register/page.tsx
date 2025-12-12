@@ -191,7 +191,7 @@ export default function RegisterPage() {
                     placeholder="korisnik123"
                     className="h-11 text-base pl-0"
                     autoComplete="username"
-                    pattern="[a-zA-Z][a-zA-Z0-9_-]{2,19}"
+                    pattern="[A-Za-z][A-Za-z0-9_\-]{2,19}"
                     minLength={3}
                     maxLength={20}
                     required

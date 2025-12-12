@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 declare global {
   interface Window {
@@ -19,11 +19,14 @@ type TurnstileCaptchaProps = {
 
 export function TurnstileCaptcha({ onToken, resetKey }: TurnstileCaptchaProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
     if (!siteKey) {
-      console.error("NEXT_PUBLIC_TURNSTILE_SITE_KEY is not set");
+      const msg = "NEXT_PUBLIC_TURNSTILE_SITE_KEY is not set";
+      console.error(msg);
+      setError("Turnstile nije konfiguriran. Dodajte site key u env i restartajte app.");
       return;
     }
 
@@ -73,4 +76,9 @@ export function TurnstileCaptcha({ onToken, resetKey }: TurnstileCaptchaProps) {
   }, [onToken, resetKey]);
 
   return <div ref={containerRef} className="cf-turnstile" />;
+  return error ? (
+    <div className="text-sm text-red-500">{error}</div>
+  ) : (
+    <div ref={containerRef} className="cf-turnstile" />
+  );
 }

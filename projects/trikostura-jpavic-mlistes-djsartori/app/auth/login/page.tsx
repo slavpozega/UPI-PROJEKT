@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SkriptaLogo } from '@/components/branding/skripta-logo';
 import { LogIn, AlertCircle, Mail, CheckCircle } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/password-input';
+import { TurnstileCaptcha } from '@/components/auth/turnstile';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -43,6 +44,7 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -188,6 +190,19 @@ export default function LoginPage() {
               >
                 Zapamti me
               </Label>
+            </div>
+
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">
+                Sigurnosna provjera <span className="text-red-500">*</span>
+              </Label>
+              <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/40">
+                <TurnstileCaptcha onToken={setCaptchaToken} resetKey={state?.error || ''} />
+              </div>
+              <input type="hidden" name="captchaToken" value={captchaToken} />
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Ova provjera štiti prijavu od automatiziranih pokušaja.
+              </p>
             </div>
           </CardContent>
 

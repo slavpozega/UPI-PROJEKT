@@ -13,6 +13,7 @@ import { UserPlus, AlertCircle, Mail, User, CheckCircle2 } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/password-input';
 import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
 import { UsernameInput } from '@/components/auth/username-input';
+import { TurnstileCaptcha } from '@/components/auth/turnstile';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -51,6 +52,7 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isUsernameValid, setIsUsernameValid] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState('');
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors };
@@ -144,8 +146,8 @@ export default function RegisterPage() {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email" className="text-sm font-medium">
-                Email adresa
+              <Label htmlFor="email" className="text-sm font-bold text-gray-900 dark:text-white">
+                Email adresa <span className="text-red-500">*</span>
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
@@ -171,14 +173,14 @@ export default function RegisterPage() {
                   {errors.email}
                 </p>
               )}
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Koristite vašu službenu studentsku email adresu
+              <p className="text-xs font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">
+                📧 Unesite vašu email adresu (npr. ime.prezime@student.hr)
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium">
-                Korisničko ime
+              <Label htmlFor="username" className="text-sm font-bold text-gray-900 dark:text-white">
+                Korisničko ime <span className="text-red-500">*</span>
               </Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 w-4 h-4 text-gray-400 z-10" />
@@ -197,14 +199,14 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                3-20 znakova, počinje slovom, samo slova, brojevi, _ i -
+              <p className="text-xs font-medium text-purple-600 dark:text-purple-400 bg-purple-50 dark:bg-purple-900/20 p-2 rounded-lg">
+                👤 Korisničko ime (NE email): 3-20 znakova, počinje slovom, samo slova, brojevi, _ i -
               </p>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="full_name" className="text-sm font-medium">
-                Puno ime
+              <Label htmlFor="full_name" className="text-sm font-bold text-gray-900 dark:text-white">
+                Puno ime <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="full_name"
@@ -231,8 +233,8 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">
-                Lozinka
+              <Label htmlFor="password" className="text-sm font-bold text-gray-900 dark:text-white">
+                Lozinka <span className="text-red-500">*</span>
               </Label>
               <PasswordInput
                 id="password"
@@ -253,8 +255,21 @@ export default function RegisterPage() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                Potvrdi lozinku
+              <Label className="text-sm font-bold text-gray-900 dark:text-white">
+                Sigurnosna provjera <span className="text-red-500">*</span>
+              </Label>
+              <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/40">
+                <TurnstileCaptcha onToken={setCaptchaToken} resetKey={state?.error || ''} />
+              </div>
+              <input type="hidden" name="captchaToken" value={captchaToken} />
+              <p className="text-xs text-gray-500 dark:text-gray-400">
+                Štitimo registraciju od botova pomoću Turnstile provjere.
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-sm font-bold text-gray-900 dark:text-white">
+                Potvrdi lozinku <span className="text-red-500">*</span>
               </Label>
               <PasswordInput
                 id="confirmPassword"
@@ -298,11 +313,11 @@ export default function RegisterPage() {
                 className="text-xs font-normal cursor-pointer select-none leading-tight"
               >
                 Slažem se s{' '}
-                <Link href="/terms" className="text-primary hover:underline">
+                <Link href="/terms" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                   Uvjetima korištenja
                 </Link>{' '}
                 i{' '}
-                <Link href="/privacy" className="text-primary hover:underline">
+                <Link href="/privacy" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
                   Politikom privatnosti
                 </Link>
               </Label>

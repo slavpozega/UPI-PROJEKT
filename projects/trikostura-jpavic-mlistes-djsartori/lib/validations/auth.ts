@@ -62,6 +62,7 @@ const emailSchema = z
 export const loginSchema = z.object({
   email: emailSchema,
   password: z.string().min(1, 'Lozinka je obavezna'),
+  captchaToken: z.string().min(1, 'Potvrdite da niste robot'),
 });
 
 export const registerSchema = z.object({
@@ -70,6 +71,7 @@ export const registerSchema = z.object({
   full_name: fullNameSchema,
   password: passwordSchema,
   confirmPassword: z.string(),
+  captchaToken: z.string().min(1, 'Potvrdite da niste robot'),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'Lozinke se ne podudaraju',
   path: ['confirmPassword'],

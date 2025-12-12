@@ -56,6 +56,34 @@ export default function RegisterPage() {
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
   const [usernameLength, setUsernameLength] = useState(0);
 
+  // Restore form data from sessionStorage on mount
+  useEffect(() => {
+    const saved = sessionStorage.getItem('registrationFormData');
+    if (saved) {
+      try {
+        const data = JSON.parse(saved);
+        setFormData(data);
+        setUsernameLength(data.username?.length || 0);
+      } catch (e) {
+        console.error('Failed to restore form data:', e);
+      }
+    }
+  }, []);
+
+  // Save form data to sessionStorage on change
+  useEffect(() => {
+    if (formData.email || formData.username || formData.full_name) {
+      sessionStorage.setItem('registrationFormData', JSON.stringify(formData));
+    }
+  }, [formData]);
+
+  // Clear sessionStorage on successful registration
+  useEffect(() => {
+    if ((state as any)?.success) {
+      sessionStorage.removeItem('registrationFormData');
+    }
+  }, [state]);
+
   useEffect(() => {
     const checkEmail = async () => {
       if (!formData.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {

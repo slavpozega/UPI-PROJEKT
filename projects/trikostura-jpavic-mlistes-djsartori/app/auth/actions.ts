@@ -91,7 +91,9 @@ export async function login(
       console.error('Profile fetch error during login:', profileError);
     }
 
-    if (!profile?.email_verified) {
+    const emailVerified = (profile as { email_verified?: boolean } | null)?.email_verified;
+
+    if (!emailVerified) {
       await supabase.auth.signOut();
       // Re-send verification email without requiring session
       await sendVerificationEmail(data.user.id, true);

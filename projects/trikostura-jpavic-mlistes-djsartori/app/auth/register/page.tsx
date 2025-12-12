@@ -269,6 +269,8 @@ export default function RegisterPage() {
                     minLength={3}
                     maxLength={20}
                     required
+                    value={formData.username}
+                    onChange={handleChange}
                     onValidationChange={setIsUsernameValid}
                   />
                 </div>

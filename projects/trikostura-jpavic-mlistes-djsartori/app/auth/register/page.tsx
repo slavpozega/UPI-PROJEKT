@@ -14,15 +14,16 @@ import { PasswordInput } from '@/components/auth/password-input';
 import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
 import { UsernameInput } from '@/components/auth/username-input';
 
-function SubmitButton() {
+function SubmitButton({ disabled }: { disabled?: boolean }) {
   const { pending } = useFormStatus();
+  const isDisabled = pending || disabled;
   return (
     <Button
       type="submit"
       variant="gradient"
       size="lg"
       className="w-full"
-      disabled={pending}
+      disabled={isDisabled}
     >
       {pending ? (
         <>
@@ -53,6 +54,7 @@ export default function RegisterPage() {
   const [isUsernameValid, setIsUsernameValid] = useState(false);
   const [emailChecking, setEmailChecking] = useState(false);
   const [emailAvailable, setEmailAvailable] = useState<boolean | null>(null);
+  const [usernameLength, setUsernameLength] = useState(0);
 
   useEffect(() => {
     const checkEmail = async () => {
@@ -120,6 +122,10 @@ export default function RegisterPage() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
 
+    if (name === 'username') {
+      setUsernameLength(value.length);
+    }
+
     if (touched[name]) {
       validateField(name, value);
     }
@@ -149,7 +155,7 @@ export default function RegisterPage() {
         </CardHeader>
 
         <form action={formAction}>
-          <CardContent className="space-y-3 sm:space-y-4 px-4 sm:px-6">
+          <CardContent className="space-y-3 px-4 sm:px-6">
             {state?.error && (
               <div className={`p-3 rounded-lg border animate-slide-up ${
                 isSuccess
@@ -183,8 +189,8 @@ export default function RegisterPage() {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="ime.prezime@example.com"
-                  className={`h-11 text-base pl-10 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
+                  placeholder="ime.prezime@student.hr"
+                  className={`h-11 text-base pl-10 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : emailAvailable === true ? 'border-green-500 focus-visible:ring-green-500' : ''}`}
                   autoComplete="email"
                   inputMode="email"
                   value={formData.email}
@@ -239,9 +245,19 @@ export default function RegisterPage() {
                   />
                 </div>
               </div>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                3-20 znakova, počinje slovom
-              </p>
+              <div className="flex justify-between items-center">
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Počinje slovom, slova/brojevi/_ i -
+                </p>
+                <p className={`text-xs tabular-nums ${
+                  usernameLength === 0 ? 'text-gray-400' :
+                  usernameLength < 3 ? 'text-red-500' :
+                  usernameLength > 20 ? 'text-red-500' :
+                  'text-gray-500 dark:text-gray-400'
+                }`}>
+                  {usernameLength}/20
+                </p>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -352,7 +368,7 @@ export default function RegisterPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col space-y-4 px-4 sm:px-6 pb-5 sm:pb-6">
-            <SubmitButton />
+            <SubmitButton disabled={emailAvailable === false || emailChecking} />
 
             <div className="relative w-full">
               <div className="absolute inset-0 flex items-center">

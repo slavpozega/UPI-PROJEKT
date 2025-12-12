@@ -13,7 +13,6 @@ import { UserPlus, AlertCircle, Mail, User, CheckCircle2 } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/password-input';
 import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
 import { UsernameInput } from '@/components/auth/username-input';
-import { TurnstileCaptcha } from '@/components/auth/turnstile';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -52,7 +51,6 @@ export default function RegisterPage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isUsernameValid, setIsUsernameValid] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState('');
 
   const validateField = (name: string, value: string) => {
     const newErrors = { ...errors };
@@ -252,19 +250,6 @@ export default function RegisterPage() {
                 password={formData.password}
                 showRequirements={true}
               />
-            </div>
-
-            <div className="space-y-2">
-              <Label className="text-sm font-bold text-gray-900 dark:text-white">
-                Sigurnosna provjera <span className="text-red-500">*</span>
-              </Label>
-              <div className="rounded-lg border border-gray-200 dark:border-gray-700 p-3 bg-gray-50 dark:bg-gray-900/40">
-                <TurnstileCaptcha onToken={setCaptchaToken} resetKey={state?.error || ''} />
-              </div>
-              <input type="hidden" name="captchaToken" value={captchaToken} />
-              <p className="text-xs text-gray-500 dark:text-gray-400">
-                Štitimo registraciju od botova pomoću Turnstile provjere.
-              </p>
             </div>
 
             <div className="space-y-2">

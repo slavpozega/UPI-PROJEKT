@@ -8,57 +8,16 @@ import { loginSchema, registerSchema } from '@/lib/validations/auth';
 import { sendPasswordResetEmail } from '@/lib/email';
 import { sendVerificationEmail } from '@/app/auth/verify-email/actions';
 
-async function verifyTurnstile(token: string) {
-  const secret = process.env.TURNSTILE_SECRET_KEY;
-
-  if (!secret) {
-    console.error('TURNSTILE_SECRET_KEY is not set');
-    return { success: false, error: 'Captcha nije konfiguriran. Kontaktirajte podršku.' };
-  }
-
-  try {
-    const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
-      method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({
-        secret,
-        response: token,
-      }),
-      // Avoid caching responses
-      cache: 'no-store',
-    });
-
-    const data = await response.json();
-
-    if (!data.success) {
-      const firstError = (data['error-codes'] && data['error-codes'][0]) || 'unknown_error';
-      return { success: false, error: `Captcha provjera nije uspjela (${firstError}). Pokušajte ponovno.` };
-    }
-
-    return { success: true };
-  } catch (error) {
-    console.error('Turnstile verification error:', error);
-    return { success: false, error: 'Captcha provjera nije uspjela. Pokušajte ponovno.' };
-  }
-}
-
 export async function login(
   prevState: { error?: string } | undefined,
   formData: FormData
 ) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const captchaToken = formData.get('captchaToken') as string;
-
-  const validation = loginSchema.safeParse({ email, password, captchaToken });
+  const validation = loginSchema.safeParse({ email, password });
 
   if (!validation.success) {
     return { error: validation.error.issues[0].message };
-  }
-
-  const captchaResult = await verifyTurnstile(captchaToken);
-  if (!captchaResult.success) {
-    return { error: captchaResult.error };
   }
 
   const supabase = await createServerSupabaseClient();
@@ -115,7 +74,6 @@ export async function register(
   const full_name = formData.get('full_name') as string;
   const password = formData.get('password') as string;
   const confirmPassword = formData.get('confirmPassword') as string;
-  const captchaToken = formData.get('captchaToken') as string;
 
   const validation = registerSchema.safeParse({
     email,
@@ -123,16 +81,10 @@ export async function register(
     full_name,
     password,
     confirmPassword,
-    captchaToken,
   });
 
   if (!validation.success) {
     return { error: validation.error.issues[0].message };
-  }
-
-  const captchaResult = await verifyTurnstile(captchaToken);
-  if (!captchaResult.success) {
-    return { error: captchaResult.error };
   }
 
   const supabase = await createServerSupabaseClient();

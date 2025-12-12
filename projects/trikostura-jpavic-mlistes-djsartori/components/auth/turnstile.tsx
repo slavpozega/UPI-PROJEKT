@@ -19,6 +19,7 @@ type TurnstileCaptchaProps = {
 
 export function TurnstileCaptcha({ onToken, resetKey }: TurnstileCaptchaProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,15 +31,22 @@ export function TurnstileCaptcha({ onToken, resetKey }: TurnstileCaptchaProps) {
       return;
     }
 
-    let widgetId: string | null = null;
-
     const renderWidget = () => {
       if (!containerRef.current || !window.turnstile) return;
 
-      widgetId = window.turnstile.render(containerRef.current, {
+      // Remove any previously rendered widget to avoid double-render warnings.
+      if (widgetIdRef.current) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
+      }
+
+      widgetIdRef.current = window.turnstile.render(containerRef.current, {
         sitekey: siteKey,
         callback: (token: string) => onToken(token),
-        "error-callback": () => onToken(""),
+        "error-callback": () => {
+          setError("Turnstile nije uspio. Pokušajte ponovno ili se javite administratoru.");
+          onToken("");
+        },
         "expired-callback": () => onToken(""),
       });
     };
@@ -69,13 +77,13 @@ export function TurnstileCaptcha({ onToken, resetKey }: TurnstileCaptchaProps) {
     ensureScript();
 
     return () => {
-      if (widgetId && window.turnstile) {
-        window.turnstile.remove(widgetId);
+      if (widgetIdRef.current && window.turnstile) {
+        window.turnstile.remove(widgetIdRef.current);
+        widgetIdRef.current = null;
       }
     };
   }, [onToken, resetKey]);
 
-  return <div ref={containerRef} className="cf-turnstile" />;
   return error ? (
     <div className="text-sm text-red-500">{error}</div>
   ) : (

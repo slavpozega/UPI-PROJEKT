@@ -12,9 +12,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { SkriptaLogo } from '@/components/branding/skripta-logo';
 import { LogIn, AlertCircle, Mail, CheckCircle } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/password-input';
+import { useLanguage } from '@/contexts/language-context';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const { t } = useLanguage();
+
   return (
     <Button
       type="submit"
@@ -26,12 +29,12 @@ function SubmitButton() {
       {pending ? (
         <>
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          Prijavljivanje...
+          {t('loggingIn')}
         </>
       ) : (
         <>
           <LogIn className="w-4 h-4" />
-          Prijavi se
+          {t('signIn')}
         </>
       )}
     </Button>
@@ -39,6 +42,7 @@ function SubmitButton() {
 }
 
 export default function LoginPage() {
+  const { t } = useLanguage();
   const [state, formAction] = useActionState(login, undefined);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
@@ -63,7 +67,7 @@ export default function LoginPage() {
     }
 
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      setEmailError('Unesite valjanu email adresu');
+      setEmailError(t('enterValidEmail'));
     } else {
       setEmailError('');
     }
@@ -77,10 +81,10 @@ export default function LoginPage() {
             <SkriptaLogo size={64} />
           </div>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white">
-            Dobrodošli natrag
+            {t('welcomeBack')}
           </CardTitle>
           <CardDescription className="text-center text-sm">
-            Prijavite se na svoj račun
+            {t('loginToAccount')}
           </CardDescription>
         </CardHeader>
 
@@ -92,17 +96,17 @@ export default function LoginPage() {
                   <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
                   <div className="flex-1">
                     <p className="text-sm font-semibold text-green-700 dark:text-green-300">
-                      Lozinka uspješno promijenjena!
+                      {t('passwordChangedSuccess')}
                     </p>
                     <p className="text-xs text-green-600 dark:text-green-400 mt-0.5">
-                      Sada se možete prijaviti s novom lozinkom.
+                      {t('canLoginWithNewPassword')}
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={() => setShowSuccessMessage(false)}
                     className="text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
-                    aria-label="Zatvori"
+                    aria-label={t('close')}
                   >
                     ✕
                   </button>
@@ -121,7 +125,7 @@ export default function LoginPage() {
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
-                Email adresa
+                {t('emailAddress')}
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -129,7 +133,7 @@ export default function LoginPage() {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="ime.prezime@example.com"
+                  placeholder={t('emailAddressPlaceholder')}
                   className={`h-11 text-base pl-10 ${emailError ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   autoComplete="email"
                   inputMode="email"
@@ -155,13 +159,13 @@ export default function LoginPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <Label htmlFor="password" className="text-sm font-medium">
-                  Lozinka
+                  {t('password')}
                 </Label>
                 <Link
                   href="/auth/reset-password"
                   className="text-xs text-primary hover:underline"
                 >
-                  Zaboravili ste lozinku?
+                  {t('forgotPassword')}
                 </Link>
               </div>
               <PasswordInput
@@ -186,7 +190,7 @@ export default function LoginPage() {
                 htmlFor="remember"
                 className="text-sm font-normal cursor-pointer select-none"
               >
-                Zapamti me
+                {t('rememberMe')}
               </Label>
             </div>
           </CardContent>
@@ -200,18 +204,18 @@ export default function LoginPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white dark:bg-gray-900 px-2 text-gray-500">
-                  ili
+                  {t('or')}
                 </span>
               </div>
             </div>
 
             <div className="text-sm text-center text-muted-foreground">
-              Nemate račun?{' '}
+              {t('noAccount')}{' '}
               <Link
                 href="/auth/register"
                 className="text-primary hover:underline font-medium"
               >
-                Registrirajte se besplatno
+                {t('registerForFree')}
               </Link>
             </div>
 
@@ -220,7 +224,7 @@ export default function LoginPage() {
                 href="/"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
               >
-                <span>←</span> Natrag na početnu
+                <span>←</span> {t('backToHome')}
               </Link>
             </div>
           </CardFooter>

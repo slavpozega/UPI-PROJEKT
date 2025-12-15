@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { LanguageProvider } from "@/contexts/language-context";
 import { Toaster } from "sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -53,18 +54,20 @@ export default function RootLayout({
   return (
     <html lang="hr" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <PerformanceMonitor />
-          {children}
-          <Toaster position="top-right" richColors closeButton />
-          <Analytics />
-          <SpeedInsights />
-        </ThemeProvider>
+        <LanguageProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <PerformanceMonitor />
+            {children}
+            <Toaster position="top-right" richColors closeButton />
+            <Analytics />
+            <SpeedInsights />
+          </ThemeProvider>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -13,9 +13,12 @@ import { UserPlus, AlertCircle, Mail, User, CheckCircle2 } from 'lucide-react';
 import { PasswordInput } from '@/components/auth/password-input';
 import { PasswordStrengthIndicator } from '@/components/auth/password-strength-indicator';
 import { UsernameInput } from '@/components/auth/username-input';
+import { useLanguage } from '@/contexts/language-context';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
+  const { t } = useLanguage();
+
   return (
     <Button
       type="submit"
@@ -27,12 +30,12 @@ function SubmitButton() {
       {pending ? (
         <>
           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-          Registracija...
+          {t('registering')}
         </>
       ) : (
         <>
           <UserPlus className="w-4 h-4" />
-          Registriraj se
+          {t('signUp')}
         </>
       )}
     </Button>
@@ -40,6 +43,7 @@ function SubmitButton() {
 }
 
 export default function RegisterPage() {
+  const { t } = useLanguage();
   const [state, formAction] = useActionState(register, undefined);
   const [formData, setFormData] = useState({
     email: '',
@@ -58,7 +62,7 @@ export default function RegisterPage() {
     switch (name) {
       case 'email':
         if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-          newErrors.email = 'Unesite valjanu email adresu';
+          newErrors.email = t('enterValidEmail');
         } else {
           delete newErrors.email;
         }
@@ -66,9 +70,9 @@ export default function RegisterPage() {
 
       case 'full_name':
         if (value && value.trim().split(/\s+/).length < 2) {
-          newErrors.full_name = 'Unesite ime i prezime';
+          newErrors.full_name = t('enterFirstAndLastName');
         } else if (value && !/^[a-zA-ZčćžšđČĆŽŠĐ\s'-]+$/.test(value)) {
-          newErrors.full_name = 'Samo slova, razmaci i znakovi \' i -';
+          newErrors.full_name = t('onlyLettersSpacesAndDashes');
         } else {
           delete newErrors.full_name;
         }
@@ -76,7 +80,7 @@ export default function RegisterPage() {
 
       case 'confirmPassword':
         if (value && value !== formData.password) {
-          newErrors.confirmPassword = 'Lozinke se ne podudaraju';
+          newErrors.confirmPassword = t('passwordsDontMatch');
         } else {
           delete newErrors.confirmPassword;
         }
@@ -111,10 +115,10 @@ export default function RegisterPage() {
             <SkriptaLogo size={64} />
           </div>
           <CardTitle className="text-xl sm:text-2xl font-bold text-center text-gray-900 dark:text-white">
-            Kreiraj račun
+            {t('createAccount')}
           </CardTitle>
           <CardDescription className="text-center text-sm">
-            Pridruži se zajednici studenata
+            {t('homeDescription')}
           </CardDescription>
         </CardHeader>
 
@@ -145,7 +149,7 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="email" className="text-sm font-medium">
-                Email adresa
+                {t('emailAddress')}
               </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
@@ -153,7 +157,7 @@ export default function RegisterPage() {
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="ime.prezime@example.com"
+                  placeholder={t('emailAddressPlaceholder')}
                   className={`h-11 text-base pl-10 ${errors.email ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                   autoComplete="email"
                   inputMode="email"
@@ -178,7 +182,7 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="username" className="text-sm font-medium">
-                Korisničko ime
+                {t('username')}
               </Label>
               <div className="relative">
                 <User className="absolute left-3 top-3 w-4 h-4 text-gray-400 z-10" />
@@ -186,7 +190,7 @@ export default function RegisterPage() {
                   <UsernameInput
                     id="username"
                     name="username"
-                    placeholder="korisnik123"
+                    placeholder={t('usernamePlaceholder')}
                     className="h-11 text-base pl-0"
                     autoComplete="username"
                     pattern="[a-zA-Z][a-zA-Z0-9_-]{2,19}"
@@ -204,13 +208,13 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="full_name" className="text-sm font-medium">
-                Puno ime
+                {t('fullName')}
               </Label>
               <Input
                 id="full_name"
                 name="full_name"
                 type="text"
-                placeholder="Ime Prezime"
+                placeholder={t('fullNamePlaceholder')}
                 className={`h-11 text-base ${errors.full_name ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                 autoComplete="name"
                 minLength={2}
@@ -232,7 +236,7 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-sm font-medium">
-                Lozinka
+                {t('password')}
               </Label>
               <PasswordInput
                 id="password"
@@ -254,12 +258,12 @@ export default function RegisterPage() {
 
             <div className="space-y-2">
               <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                Potvrdi lozinku
+                {t('confirmPassword')}
               </Label>
               <PasswordInput
                 id="confirmPassword"
                 name="confirmPassword"
-                placeholder="••••••••"
+                placeholder={t('confirmPasswordPlaceholder')}
                 className={`h-11 text-base ${errors.confirmPassword ? 'border-red-500 focus-visible:ring-red-500' : ''}`}
                 autoComplete="new-password"
                 minLength={8}
@@ -318,18 +322,18 @@ export default function RegisterPage() {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-white dark:bg-gray-900 px-2 text-gray-500">
-                  ili
+                  {t('or')}
                 </span>
               </div>
             </div>
 
             <div className="text-sm text-center text-muted-foreground">
-              Već imate račun?{' '}
+              {t('haveAccount')}{' '}
               <Link
                 href="/auth/login"
                 className="text-primary hover:underline font-medium"
               >
-                Prijavite se
+                {t('loginHere')}
               </Link>
             </div>
 
@@ -338,7 +342,7 @@ export default function RegisterPage() {
                 href="/"
                 className="text-sm text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1"
               >
-                <span>←</span> Natrag na početnu
+                <span>←</span> {t('backToHome')}
               </Link>
             </div>
           </CardFooter>

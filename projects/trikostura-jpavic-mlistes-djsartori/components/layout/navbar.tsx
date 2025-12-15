@@ -3,11 +3,13 @@ import { createServerSupabaseClient } from '@/lib/supabase/server';
 import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
+import { LanguageToggle } from '@/components/ui/language-toggle';
 import { SkriptaLogo } from '@/components/branding/skripta-logo';
 import { NotificationBell } from '@/components/notifications/notification-bell';
 import { NavbarBookmarkButton } from './navbar-bookmark-button';
 import { MobileNav } from './mobile-nav';
-import { NavLink } from './nav-link';
+import { NavLinkClient } from './nav-link-client';
+import { NavbarLoginButton, NavbarRegisterButton, NavbarNewTopicButton } from './navbar-client';
 import { logout } from '@/app/auth/actions';
 import { MessageSquare, User, LogOut, Search, Settings, Bookmark, Mail } from 'lucide-react';
 import type { Notification } from '@/types/notifications';
@@ -65,37 +67,32 @@ export async function Navbar() {
             </Link>
 
             <div className="hidden md:flex items-center gap-4">
-              <NavLink
+              <NavLinkClient
                 href="/forum"
+                translationKey="forum"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                Forum
-              </NavLink>
-              <NavLink
+              />
+              <NavLinkClient
                 href="/forum/users"
+                translationKey="users"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                Korisnici
-              </NavLink>
-              <NavLink
+              />
+              <NavLinkClient
                 href="/forum/leaderboard"
+                translationKey="leaderboard"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                Ljestvica
-              </NavLink>
-              <NavLink
+              />
+              <NavLinkClient
                 href="/forum/search"
+                translationKey="search"
                 className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-              >
-                Pretraži
-              </NavLink>
+              />
               {profile?.role === 'admin' && (
-                <NavLink
+                <NavLinkClient
                   href="/admin"
+                  translationKey="admin"
                   className="text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white transition-colors"
-                >
-                  Admin
-                </NavLink>
+                />
               )}
             </div>
           </div>
@@ -104,9 +101,7 @@ export async function Navbar() {
           <div className="hidden md:flex items-center gap-3 lg:gap-4">
             {user && profile ? (
               <>
-                <Link href="/forum/new">
-                  <Button variant="gradient" size="sm">Nova tema</Button>
-                </Link>
+                <NavbarNewTopicButton />
                 <NavbarBookmarkButton />
                 <Link href="/messages" title="Poruke">
                   <Button variant="ghost" size="sm">
@@ -117,6 +112,7 @@ export async function Navbar() {
                   initialNotifications={notifications}
                   initialUnreadCount={unreadCount}
                 />
+                <LanguageToggle />
                 <ThemeToggle />
                 <Link
                   href={`/forum/user/${profile.username}`}
@@ -138,21 +134,17 @@ export async function Navbar() {
               </>
             ) : (
               <>
+                <LanguageToggle />
                 <ThemeToggle />
-                <Link href="/auth/login">
-                  <Button variant="outline" size="sm">
-                    Prijava
-                  </Button>
-                </Link>
-                <Link href="/auth/register">
-                  <Button variant="gradient" size="sm">Registracija</Button>
-                </Link>
+                <NavbarLoginButton />
+                <NavbarRegisterButton />
               </>
             )}
           </div>
 
           {/* Mobile Actions */}
           <div className="flex md:hidden items-center gap-2">
+            <LanguageToggle />
             <ThemeToggle />
             {user && profile && (
               <NotificationBell

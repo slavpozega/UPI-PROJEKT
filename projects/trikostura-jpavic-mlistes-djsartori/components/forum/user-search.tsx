@@ -7,12 +7,14 @@ import { Button } from '@/components/ui/button';
 import { Avatar } from '@/components/ui/avatar';
 import { sanitizeSearchQuery } from '@/lib/utils/sanitize';
 import { Search, User, Star, MessageSquare, FileText } from 'lucide-react';
+import { useLanguage } from '@/contexts/language-context';
 
 interface UserSearchProps {
   users: any[];
 }
 
 export function UserSearch({ users }: UserSearchProps) {
+  const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'username' | 'reputation' | 'activity'>('username');
 
@@ -46,7 +48,7 @@ export function UserSearch({ users }: UserSearchProps) {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <Input
             type="text"
-            placeholder="Pretraži korisnike..."
+            placeholder={t('searchUsers')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -59,7 +61,7 @@ export function UserSearch({ users }: UserSearchProps) {
             onClick={() => setSortBy('username')}
             className="flex-shrink-0"
           >
-            Abecedno
+            {t('alphabetically')}
           </Button>
           <Button
             variant={sortBy === 'reputation' ? 'default' : 'outline'}
@@ -67,7 +69,7 @@ export function UserSearch({ users }: UserSearchProps) {
             onClick={() => setSortBy('reputation')}
             className="flex-shrink-0"
           >
-            Reputacija
+            {t('reputation')}
           </Button>
           <Button
             variant={sortBy === 'activity' ? 'default' : 'outline'}
@@ -75,14 +77,14 @@ export function UserSearch({ users }: UserSearchProps) {
             onClick={() => setSortBy('activity')}
             className="flex-shrink-0"
           >
-            Aktivnost
+            {t('activity')}
           </Button>
         </div>
       </div>
 
       {/* Results Count */}
       <p className="text-sm text-gray-500 dark:text-gray-400">
-        Pronađeno: {filteredAndSortedUsers.length} korisnik(a)
+        {t('found')}: {filteredAndSortedUsers.length} {t('usersFound')}
       </p>
 
       {/* User List */}
@@ -106,7 +108,7 @@ export function UserSearch({ users }: UserSearchProps) {
                 </p>
                 {user.role === 'admin' && (
                   <span className="text-xs px-1.5 py-0.5 bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 rounded flex-shrink-0">
-                    Admin
+                    {t('admin')}
                   </span>
                 )}
               </div>
@@ -136,7 +138,7 @@ export function UserSearch({ users }: UserSearchProps) {
         <div className="text-center py-8 sm:py-12">
           <User className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 dark:text-gray-600 mx-auto mb-3 sm:mb-4" />
           <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-            Nema korisnika koji odgovaraju pretrazi
+            {t('noUsersMatch')}
           </p>
         </div>
       )}

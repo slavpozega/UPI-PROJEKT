@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { sanitizeSearchQuery } from '@/lib/utils/sanitize';
-import { Breadcrumb } from '@/components/forum/breadcrumb';
+import { BreadcrumbClient } from '@/components/forum/breadcrumb-client';
+import { useLanguage } from '@/contexts/language-context';
 import {
   Search,
   MessageSquare,
@@ -53,6 +54,7 @@ const RECENT_SEARCHES_KEY = 'forum_recent_searches';
 const MAX_RECENT_SEARCHES = 5;
 
 export default function SearchPage() {
+  const { t } = useLanguage();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -472,17 +474,19 @@ export default function SearchPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6">
       {/* Breadcrumb Navigation */}
-      <Breadcrumb
+      <BreadcrumbClient
         items={[
-          { label: 'Forum', href: '/forum' },
-          { label: 'Pretraga' },
+          { labelKey: 'forum', href: '/forum' },
+          { labelKey: 'search' },
         ]}
       />
 
       <div>
-        <h1 className="text-3xl font-bold mb-2">Napredna Pretraga Foruma</h1>
+        <h1 className="text-3xl font-bold mb-2">{t('advancedForumSearch')}</h1>
         <p className="text-gray-600 dark:text-gray-400">
-          Pretraži {stats.totalTopics.toLocaleString()} tema i {stats.totalReplies.toLocaleString()} odgovora
+          {t('searchTopicsAndReplies')
+            .replace('{topics}', stats.totalTopics.toLocaleString())
+            .replace('{replies}', stats.totalReplies.toLocaleString())}
         </p>
       </div>
 
@@ -496,7 +500,7 @@ export default function SearchPage() {
                 <Input
                   ref={searchInputRef}
                   type="text"
-                  placeholder="Upiši pojam za pretragu... (ili pritisni '/' ili Ctrl+K)"
+                  placeholder={t('enterSearchTerm')}
                   value={query}
                   onChange={(e) => {
                     setQuery(e.target.value);
@@ -553,7 +557,7 @@ export default function SearchPage() {
                 className="flex items-center gap-2"
               >
                 <Filter className="w-4 h-4" />
-                Filteri
+                {t('filters')}
                 {activeFilterCount > 0 && (
                   <Badge variant="secondary" className="ml-1">
                     {activeFilterCount}
@@ -566,7 +570,7 @@ export default function SearchPage() {
                 />
               </Button>
               <Button type="submit" disabled={isSearching || !query.trim()}>
-                {isSearching ? 'Pretraživanje...' : 'Pretraži'}
+                {isSearching ? t('searching') : t('searchButton')}
               </Button>
             </div>
 
@@ -577,9 +581,9 @@ export default function SearchPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Sve</SelectItem>
-                  <SelectItem value="topics">Samo Teme</SelectItem>
-                  <SelectItem value="replies">Samo Odgovori</SelectItem>
+                  <SelectItem value="all">{t('all')}</SelectItem>
+                  <SelectItem value="topics">{t('topicsOnly')}</SelectItem>
+                  <SelectItem value="replies">{t('repliesOnly')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -588,11 +592,11 @@ export default function SearchPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">Bilo kada</SelectItem>
-                  <SelectItem value="day">Zadnji dan</SelectItem>
-                  <SelectItem value="week">Zadnji tjedan</SelectItem>
-                  <SelectItem value="month">Zadnji mjesec</SelectItem>
-                  <SelectItem value="year">Zadnja godina</SelectItem>
+                  <SelectItem value="all">{t('anytime')}</SelectItem>
+                  <SelectItem value="day">{t('lastDay')}</SelectItem>
+                  <SelectItem value="week">{t('lastWeek')}</SelectItem>
+                  <SelectItem value="month">{t('lastMonth')}</SelectItem>
+                  <SelectItem value="year">{t('lastYear')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -601,10 +605,10 @@ export default function SearchPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="relevance">Relevantnost</SelectItem>
-                  <SelectItem value="date-desc">Najnovije</SelectItem>
-                  <SelectItem value="date-asc">Najstarije</SelectItem>
-                  <SelectItem value="replies">Broj odgovora</SelectItem>
+                  <SelectItem value="relevance">{t('relevance')}</SelectItem>
+                  <SelectItem value="date-desc">{t('newest')}</SelectItem>
+                  <SelectItem value="date-asc">{t('oldest')}</SelectItem>
+                  <SelectItem value="replies">{t('mostReplies')}</SelectItem>
                 </SelectContent>
               </Select>
 
@@ -616,7 +620,7 @@ export default function SearchPage() {
                   onClick={clearFilters}
                 >
                   <X className="w-4 h-4 mr-1" />
-                  Obriši filtere
+                  {t('clearFilters')}
                 </Button>
               )}
             </div>
@@ -624,7 +628,7 @@ export default function SearchPage() {
             {/* Active Filter Chips */}
             {activeFilterCount > 0 && (
               <div className="flex flex-wrap gap-2 pt-2 border-t">
-                <span className="text-sm text-gray-500 py-1">Aktivni filteri:</span>
+                <span className="text-sm text-gray-500 py-1">{t('activeFilters')}:</span>
 
                 {selectedCategories.map((catId) => {
                   const category = categories.find(c => c.id === catId);
@@ -652,11 +656,11 @@ export default function SearchPage() {
                     className="cursor-pointer hover:opacity-70 transition-opacity"
                     onClick={() => setDateRange('all')}
                   >
-                    Datum: {
-                      dateRange === 'day' ? 'Zadnji dan' :
-                      dateRange === 'week' ? 'Zadnji tjedan' :
-                      dateRange === 'month' ? 'Zadnji mjesec' :
-                      'Zadnja godina'
+                    {t('date')}: {
+                      dateRange === 'day' ? t('lastDay') :
+                      dateRange === 'week' ? t('lastWeek') :
+                      dateRange === 'month' ? t('lastMonth') :
+                      t('lastYear')
                     }
                     <X className="w-3 h-3 ml-1" />
                   </Badge>
@@ -668,7 +672,7 @@ export default function SearchPage() {
                     className="cursor-pointer hover:opacity-70 transition-opacity"
                     onClick={() => setAuthorFilter('')}
                   >
-                    Autor: {authorFilter}
+                    {t('author')}: {authorFilter}
                     <X className="w-3 h-3 ml-1" />
                   </Badge>
                 )}
@@ -679,10 +683,10 @@ export default function SearchPage() {
                     className="cursor-pointer hover:opacity-70 transition-opacity"
                     onClick={() => setSortBy('relevance')}
                   >
-                    Sortiranje: {
-                      sortBy === 'date-desc' ? 'Najnovije' :
-                      sortBy === 'date-asc' ? 'Najstarije' :
-                      'Broj odgovora'
+                    {t('sortBy')}: {
+                      sortBy === 'date-desc' ? t('newest') :
+                      sortBy === 'date-asc' ? t('oldest') :
+                      t('mostReplies')
                     }
                     <X className="w-3 h-3 ml-1" />
                   </Badge>

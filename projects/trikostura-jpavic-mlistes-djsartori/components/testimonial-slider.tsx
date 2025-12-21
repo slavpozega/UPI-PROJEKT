@@ -63,7 +63,7 @@ const testimonials: Testimonial[] = [
   {
     id: 6,
     name: 'Maja',
-    university: 'FIPU Pula',
+    university: 'FIDIT Rijeka',
     initial: 'M',
     color: 'from-pink-500 to-pink-600',
     text: '"Skripta mi je spasila studij! Pronašla sam odgovore na sva pitanja i upoznala divne ljude koji su mi pomogli."',
@@ -72,7 +72,7 @@ const testimonials: Testimonial[] = [
   {
     id: 7,
     name: 'Tomislav',
-    university: 'FSB Zagreb',
+    university: 'FERIT Osijek',
     initial: 'T',
     color: 'from-indigo-500 to-indigo-600',
     text: '"Kvaliteta materijala i brzina odgovora su izvanredni. Ovo je jedina platforma koja mi je stvarno trebala!"',

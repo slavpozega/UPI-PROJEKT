@@ -94,6 +94,73 @@ export interface Database {
           email_verified_at?: string | null
         }
       }
+      universities: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          city: string
+          description: string | null
+          order_index: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          city: string
+          description?: string | null
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          city?: string
+          description?: string | null
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      faculties: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          abbreviation: string | null
+          description: string | null
+          university_id: string
+          order_index: number
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          abbreviation?: string | null
+          description?: string | null
+          university_id: string
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          abbreviation?: string | null
+          description?: string | null
+          university_id?: string
+          order_index?: number
+          created_at?: string
+          updated_at?: string
+        }
+      }
       categories: {
         Row: {
           id: string
@@ -103,6 +170,7 @@ export interface Database {
           icon: string | null
           color: string | null
           order_index: number
+          faculty_id: string | null
           created_at: string
           updated_at: string
         }
@@ -114,6 +182,7 @@ export interface Database {
           icon?: string | null
           color?: string | null
           order_index?: number
+          faculty_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -125,6 +194,7 @@ export interface Database {
           icon?: string | null
           color?: string | null
           order_index?: number
+          faculty_id?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -137,6 +207,7 @@ export interface Database {
           content: string
           author_id: string
           category_id: string
+          faculty_id: string | null
           is_pinned: boolean
           is_locked: boolean
           view_count: number
@@ -155,6 +226,7 @@ export interface Database {
           content: string
           author_id: string
           category_id: string
+          faculty_id?: string | null
           is_pinned?: boolean
           is_locked?: boolean
           view_count?: number
@@ -173,6 +245,7 @@ export interface Database {
           content?: string
           author_id?: string
           category_id?: string
+          faculty_id?: string | null
           is_pinned?: boolean
           is_locked?: boolean
           view_count?: number
@@ -318,6 +391,8 @@ export interface Database {
  * Convenience type exports for easier use in components
  */
 export type Profile = Database['public']['Tables']['profiles']['Row'];
+export type University = Database['public']['Tables']['universities']['Row'];
+export type Faculty = Database['public']['Tables']['faculties']['Row'];
 export type Category = Database['public']['Tables']['categories']['Row'];
 export type Topic = Database['public']['Tables']['topics']['Row'];
 export type Reply = Database['public']['Tables']['replies']['Row'];
@@ -369,6 +444,18 @@ export interface ReplyWithAuthor extends Reply {
 export interface CategoryWithStats extends Category {
   topic_count?: number;
   last_post_at?: string | null;
+}
+
+export interface UniversityWithFaculties extends University {
+  faculties?: Faculty[];
+}
+
+export interface FacultyWithUniversity extends Faculty {
+  university?: University;
+}
+
+export interface FacultyWithCategories extends Faculty {
+  categories?: Category[];
 }
 
 /**

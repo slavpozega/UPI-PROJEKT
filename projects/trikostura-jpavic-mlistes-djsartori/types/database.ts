@@ -38,6 +38,8 @@ export interface Database {
           profile_banner_url: string | null
           email_verified: boolean
           email_verified_at: string | null
+          university_id: string | null
+          faculty_id: string | null
         }
         Insert: {
           id: string
@@ -65,6 +67,8 @@ export interface Database {
           profile_banner_url?: string | null
           email_verified?: boolean
           email_verified_at?: string | null
+          university_id?: string | null
+          faculty_id?: string | null
         }
         Update: {
           id?: string
@@ -92,6 +96,8 @@ export interface Database {
           profile_banner_url?: string | null
           email_verified?: boolean
           email_verified_at?: string | null
+          university_id?: string | null
+          faculty_id?: string | null
         }
       }
       universities: {

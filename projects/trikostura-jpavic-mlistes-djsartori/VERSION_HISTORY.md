@@ -354,15 +354,70 @@ Ovaj dokument prati kronološke promjene kroz projekt **Skripta** (Studentski Fo
 
 ---
 
+## V2.6.0 - Hijerarhijska Struktura Foruma (21. prosinca 2025.)
+
+**Datum objave:** 21. prosinac 2025.
+
+### Dodano
+- Hijerarhijska struktura foruma sa sveučilištima i fakultetima:
+  - 4 sveučilišta: Zagreb, Split, Rijeka, Osijek
+  - 12 fakulteta (3 po sveučilištu): FER, EFZG, PMF Zagreb, PMF Split, FESB, EFST, FIDIT, EFRI, BIOTEH Rijeka, FERIT, EFOS, OBILOS
+  - 72 kategorije (6 po fakultetu): Opće, Pitanja, Studij, Karijera, Tehnologija, Off-topic
+- Navigacija kroz sveučilišta i fakultete:
+  - Stranica odabira sveučilišta
+  - Stranica odabira fakulteta unutar sveučilišta
+  - Forum stranica po fakultetu sa kategorijama
+- Dropdown odabir akademskih informacija u profilu:
+  - Cascading dropdown sveučilište → fakultet
+  - Postojeća polja: program, godina studija, godina završetka
+  - Ukupno 5 akademskih polja
+- Prikaz akademskih informacija na profilu korisnika:
+  - Prikaz sveučilišta i fakulteta sa joinovima
+  - Vizualne kartice za sve akademske podatke
+- Database migracije:
+  - `universities.sql` - tablice sveučilišta i fakulteta
+  - `categories-per-faculty.sql` - automatsko generiranje kategorija
+  - `add-profile-university-faculty.sql` - proširenje profila
+- Ažurirani testimoniali na početnoj stranici sa stvarnim fakultetima
+
+### Promijenjeno
+- Struktura navigacije foruma:
+  - `/forum` preusmjerava na `/forum/select-university`
+  - `/forum/new` preusmjerava na odabir sveučilišta (spriječeno direktno kreiranje)
+  - Novi URL format: `/forum/[university]/[faculty]/...`
+- Uklonjena "Nova tema" akcija iz navigacije:
+  - Uklonjeno iz desktop navbara
+  - Uklonjeno iz mobilnog izbornika
+  - Korisnici stvaraju teme unutar konteksta fakulteta
+- Profil edit forma:
+  - Zamijenjeno slobodno unošenje sveučilišta sa dropdown menijem
+  - Dodano fakultet polje sa cascading filtriranjem
+  - Postojeće vrijednosti sveučilišta postaju neodređene
+- Ažurirana struktura projekta u README.md
+- Ažurirane upute za postavljanje baze podataka (3 nove migracije)
+
+### Ispravljeno
+- Prikaz akademskih informacija na profilu (sada prikazuje sve podatke)
+- TypeScript tipovi za prošireni profil sa university_id i faculty_id
+- Testimoniali koriste samo stvarne fakultete iz baze podataka
+
+### Uklonjeno
+- Admin upravljanje kategorijama (kategorije su sada permanentne)
+  - Uklonjeno iz admin navigacije
+  - Uklonjena cijela `/admin/categories` ruta
+  - Uklonjene "Brze akcije" sekcije iz admin panela
+
+---
+
 ## Statistika Sažetka
 
-- **Ukupno Commitova:** 241
-- **Razdoblje Razvoja:** 5. studeni 2025. - 13. prosinac 2025. (38 dana)
+- **Ukupno Commitova:** 250+
+- **Razdoblje Razvoja:** 5. studeni 2025. - 21. prosinac 2025. (46 dana)
 - **Glavne Verzije:** 3 (V0, V1, V2)
-- **Manje Verzije:** 10
+- **Manje Verzije:** 11
 - **Patch Verzije:** 1
 - **Primarni Tech Stack:** Next.js, TypeScript, Supabase, Tailwind CSS
-- **Ključne Značajke:** Forum sustav, gamifikacija, AI asistent (uklonjen), moderacija sadržaja, mobile-first dizajn
+- **Ključne Značajke:** Hijerarhijski forum (sveučilišta/fakulteti), gamifikacija, moderacija sadržaja, mobile-first dizajn
 
 ---
 
@@ -376,7 +431,8 @@ Ovaj dokument prati kronološke promjene kroz projekt **Skripta** (Studentski Fo
 | 7. pro 2025. | V2.0.0 | Potpuni sustav autentifikacije |
 | 11. pro 2025. | V2.2.0 | Lansiran sustav gamifikacije |
 | 12. pro 2025. | V2.4.0 | AI asistent (kasnije uklonjen) |
-| 13. pro 2025. | V2.5.1 | Trenutna verzija |
+| 13. pro 2025. | V2.5.1 | Dorada registracije |
+| 21. pro 2025. | V2.6.0 | Trenutna verzija - Hijerarhijski forum |
 
 ---
 
@@ -390,4 +446,4 @@ Ovaj projekt slijedi [Semantičko Verzioniranje](https://semver.org/):
 
 ---
 
-*Zadnje Ažurirano: 13. prosinac 2025.*
+*Zadnje Ažurirano: 21. prosinac 2025.*

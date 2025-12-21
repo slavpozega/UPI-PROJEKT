@@ -73,15 +73,6 @@ export function MobileNav({ user, profile }: MobileNavProps) {
                   {/* Navigation Links */}
                   <div className="space-y-1">
                     <Link
-                      href="/forum/new"
-                      onClick={closeMenu}
-                      className="flex items-center gap-3 p-3 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 text-blue-600 dark:text-blue-400 font-medium transition-colors"
-                    >
-                      <Plus className="w-5 h-5" />
-                      Nova tema
-                    </Link>
-
-                    <Link
                       href="/forum"
                       onClick={closeMenu}
                       className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 transition-colors"

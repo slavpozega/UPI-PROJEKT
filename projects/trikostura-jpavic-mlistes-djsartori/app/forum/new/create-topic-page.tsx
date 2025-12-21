@@ -27,11 +27,11 @@ const MAX_TITLE_LENGTH = 200;
 const MAX_CONTENT_LENGTH = 10000;
 const AUTOSAVE_DELAY = 3000; // 3 seconds
 
-export function CreateTopicPage({ categories, tags, initialDraft }: any) {
+export function CreateTopicPage({ categories, tags, initialDraft, universitySlug, facultySlug, facultyId, preSelectedCategoryId }: any) {
   const router = useRouter();
   const [title, setTitle] = useState(initialDraft?.title || '');
   const [content, setContent] = useState(initialDraft?.content || '');
-  const [categoryId, setCategoryId] = useState(initialDraft?.category_id || '');
+  const [categoryId, setCategoryId] = useState(preSelectedCategoryId || initialDraft?.category_id || '');
   const [selectedTags, setSelectedTags] = useState<string[]>(initialDraft?.tags || []);
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -271,6 +271,7 @@ export function CreateTopicPage({ categories, tags, initialDraft }: any) {
           slug: generateSlug(finalTitle),
           content: finalContent,
           category_id: categoryId,
+          faculty_id: facultyId || null,
           author_id: user.id,
           auto_flagged: moderationResult.severity ? true : false,
           moderation_status: moderationResult.severity && moderationResult.severity !== 'low' ? 'flagged' : 'approved',
@@ -347,7 +348,13 @@ export function CreateTopicPage({ categories, tags, initialDraft }: any) {
 
       triggerSubmitAnimation();
       toast.success('Tema uspješno objavljena!', { id: loadingToast });
-      router.push(`/forum/topic/${topic.slug}`);
+
+      // Redirect to the correct path based on whether we have university/faculty context
+      if (universitySlug && facultySlug) {
+        router.push(`/forum/${universitySlug}/${facultySlug}/topic/${topic.slug}`);
+      } else {
+        router.push(`/forum/topic/${topic.slug}`);
+      }
     } catch (err: any) {
       console.error('Error creating topic:', err);
       setError(err.message || 'Došlo je do greške');

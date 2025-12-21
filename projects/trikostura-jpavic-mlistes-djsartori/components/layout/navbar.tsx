@@ -104,9 +104,6 @@ export async function Navbar() {
           <div className="hidden md:flex items-center gap-3 lg:gap-4">
             {user && profile ? (
               <>
-                <Link href="/forum/new">
-                  <Button variant="gradient" size="sm">Nova tema</Button>
-                </Link>
                 <NavbarBookmarkButton />
                 <Link href="/messages" title="Poruke">
                   <Button variant="ghost" size="sm">

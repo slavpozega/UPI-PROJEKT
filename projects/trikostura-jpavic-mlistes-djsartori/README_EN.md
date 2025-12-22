@@ -8,14 +8,15 @@ Online forum for students from all universities in Croatia. Users can create and
 
 ### Implemented ✅
 - ✅ **Authentication** - User registration and login with Supabase Auth
-- ✅ **Forum categories** - 6 predefined categories (General, Questions, Study, Career, Technology, Off-topic)
+- ✅ **Hierarchical structure** - 4 universities, 12 faculties, 6 categories per faculty (72 total categories)
+- ✅ **Forum navigation** - Select university → faculty → category
 - ✅ **Topics** - Create, view and list topics with pagination
 - ✅ **Replies** - Comment on topics with real-time updates
 - ✅ **Voting** - Upvote/downvote system for replies
 - ✅ **Search** - Full-text search through topics by title and content
-- ✅ **User profiles** - Complete profiles with statistics and activities
-- ✅ **Profile editing** - Edit avatar, biography and other data
-- ✅ **Admin panel** - Complete admin panel for managing users, topics, replies, categories and analytics
+- ✅ **User profiles** - Complete profiles with statistics, academic information and faculty
+- ✅ **Profile editing** - Edit avatar, biography, university, faculty and study data
+- ✅ **Admin panel** - Complete admin panel for managing users, topics, replies and analytics
 - ✅ **Notifications** - Real-time notifications for new replies, upvotes and pinned topics
 - ✅ **Markdown support** - Rich text editor with live preview and syntax highlighting
 - ✅ **Responsive design** - Optimized for mobile devices
@@ -80,8 +81,14 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 3. Paste into SQL Editor and run
 4. Copy the entire content from `supabase/notifications.sql`
 5. Paste into SQL Editor and run
+6. Copy the entire content from `supabase/universities.sql`
+7. Paste into SQL Editor and run
+8. Copy the entire content from `supabase/categories-per-faculty.sql`
+9. Paste into SQL Editor and run
+10. Copy the entire content from `supabase/add-profile-university-faculty.sql`
+11. Paste into SQL Editor and run
 
-This will create all tables, policies, triggers, functions and default categories.
+This will create all tables, policies, triggers, functions, universities, faculties and categories.
 
 **⚠️ Important:**
 - Go to **Authentication > Providers > Email** and **disable** "Confirm email" if you want to test registration without email confirmation.
@@ -108,34 +115,41 @@ After registration:
 
 ```
 /app
-  /auth              # Login, register pages
-  /forum             # Forum pages
-    /category/[slug] # Categories
-    /topic/[slug]    # Individual topic
-    /user/[username] # User profiles
-      /edit          # Profile editing
-    /search          # Topic search
-    /new             # New topic
-    loading.tsx      # Loading states
-  /admin             # Admin panel
-    /users           # User management
-    /topics          # Topic moderation
-    /replies         # Reply moderation
-    /categories      # Category management
-    /analytics       # Analytics and statistics
-  /notifications     # Page with all notifications
+  /auth                           # Login, register pages
+  /forum                          # Forum pages
+    /select-university            # University selection
+      /[university]               # Faculty selection within university
+    /[university]/[faculty]       # Faculty forum page
+      /category/[slug]            # Faculty categories
+      /topic/[slug]               # Individual faculty topic
+      /new                        # New topic for faculty
+    /category/[slug]              # Legacy categories (deprecated)
+    /topic/[slug]                 # Legacy topics (deprecated)
+    /user/[username]              # User profiles
+      /edit                       # Profile editing
+    /search                       # Topic search
+    loading.tsx                   # Loading states
+  /admin                          # Admin panel
+    /users                        # User management
+    /topics                       # Topic moderation
+    /replies                      # Reply moderation
+    /analytics                    # Analytics and statistics
+  /notifications                  # Page with all notifications
 /components
-  /ui                # shadcn components
-  /forum             # Forum components (markdown editor/renderer, forms, cards)
-  /notifications     # Notification components (bell, list)
-  /layout            # Navbar
+  /ui                             # shadcn components
+  /forum                          # Forum components (markdown editor/renderer, forms, cards)
+  /notifications                  # Notification components (bell, list)
+  /layout                         # Navbar, mobile nav
 /lib
-  /supabase          # Supabase client (SSR & client)
-  /validations       # Zod schemas
-/types               # TypeScript types
+  /supabase                       # Supabase client (SSR & client)
+  /validations                    # Zod schemas
+/types                            # TypeScript types
 /supabase
-  schema.sql         # Database schema
-  notifications.sql  # Notification system schema
+  schema.sql                      # Database schema
+  notifications.sql               # Notification system schema
+  universities.sql                # Universities and faculties
+  categories-per-faculty.sql      # Categories per faculty
+  add-profile-university-faculty.sql # Profile academic information
 ```
 
 ## 🚀 Deployment to Vercel
@@ -153,8 +167,11 @@ After registration:
 - Server-side rendering (SSR) for security
 
 ### Forum Functionality
-- **Categories**: 6 predefined categories with colors
-- **Topics**: Create new topics, pinning, view count
+- **Hierarchical structure**: 4 universities → 12 faculties → 72 categories (6 per faculty)
+- **Universities**: Zagreb, Split, Rijeka, Osijek
+- **Faculties**: 3 faculties per university (FER, PMF Split, FIDIT, FERIT, etc.)
+- **Categories**: General, Questions, Study, Career, Technology, Off-topic (per faculty)
+- **Topics**: Create new topics within faculty, pinning, view count
 - **Replies**: Comment with threaded replies
 - **Voting**: Upvote/downvote system
 - **Search**: Full-text search by title and content
@@ -174,14 +191,15 @@ After registration:
 - Latest topics and replies
 - Role badges (Admin, Moderator)
 - Join date
-- Profile editing (avatar, biography, faculty, major)
+- Academic information (university, faculty, program, study year, graduation year)
+- Profile editing with dropdown university and faculty selection
 
 ### Admin Panel
 - User management (ban, promote, role assignment)
 - Topic moderation (pin, lock, delete)
 - Reply moderation (delete)
-- Category management (CRUD)
 - Platform analytics and statistics
+- **Note**: Categories are permanent and automatically generated per faculty
 
 ### UI/UX
 - Skeleton loading states
@@ -193,20 +211,22 @@ After registration:
 
 **✅ Production Ready** - All core features implemented and optimized
 
-### 🆕 Latest Updates (V2.5.1 - December 13, 2025)
+### 🆕 Latest Updates (V2.6.0 - December 21, 2025)
 
-**New Features:**
+**Latest Features:**
+- ✨ **Hierarchical forum structure** - 4 universities, 12 faculties, 72 categories
+- ✨ **University/faculty navigation** - Intuitive navigation through academic structure
+- ✨ **Faculty dropdown selection** - Cascading dropdown in profile (university → faculty)
+- ✨ **Profile academic information** - Display university, faculty, program, study year
 - ✨ **Gamification system** - Achievements, leaderboards (all-time and weekly), activity tracking
 - ✨ **Content moderation** - Spam detection, rate limiting, content filtering (Croatian)
 - ✨ **Polls and reactions** - Poll creation and reaction system for posts
 - ✨ **Vercel Analytics** - Performance tracking and unique views per user
 - ✨ **Improved registration** - Real-time email check, character counter, persisted form data
 - ✨ **Email verification** - Mandatory verification before forum access
-- ✨ **Terms and privacy** - Terms of service and privacy policy pages
 - ✨ **Breadcrumb navigation** - Navigation paths across all forum pages
 - ✨ **Private messaging** - Private message and user follow system
 - ✨ **Bookmarks** - Save favorite topics
-- ✨ **Password reset** - Complete custom email-based password reset system
 
 **Optimizations:**
 - ⚡ Massive performance optimization - 60-85% faster page loads

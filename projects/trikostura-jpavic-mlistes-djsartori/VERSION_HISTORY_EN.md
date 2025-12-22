@@ -354,15 +354,70 @@ This document tracks the chronological changes throughout the **Skripta** (Stude
 
 ---
 
+## V2.6.0 - Hierarchical Forum Structure (December 21, 2025)
+
+**Release Date:** December 21, 2025
+
+### Added
+- Hierarchical forum structure with universities and faculties:
+  - 4 universities: Zagreb, Split, Rijeka, Osijek
+  - 12 faculties (3 per university): FER, EFZG, PMF Zagreb, PMF Split, FESB, EFST, FIDIT, EFRI, BIOTEH Rijeka, FERIT, EFOS, OBILOS
+  - 72 categories (6 per faculty): General, Questions, Study, Career, Technology, Off-topic
+- Navigation through universities and faculties:
+  - University selection page
+  - Faculty selection page within university
+  - Faculty forum page with categories
+- Dropdown selection of academic information in profile:
+  - Cascading dropdown university → faculty
+  - Existing fields: program, study year, graduation year
+  - Total of 5 academic fields
+- Display of academic information on user profile:
+  - Display university and faculty with joins
+  - Visual cards for all academic data
+- Database migrations:
+  - `universities.sql` - universities and faculties tables
+  - `categories-per-faculty.sql` - automatic category generation
+  - `add-profile-university-faculty.sql` - profile extension
+- Updated testimonials on homepage with real faculties
+
+### Changed
+- Forum navigation structure:
+  - `/forum` redirects to `/forum/select-university`
+  - `/forum/new` redirects to university selection (prevented direct creation)
+  - New URL format: `/forum/[university]/[faculty]/...`
+- Removed "New topic" action from navigation:
+  - Removed from desktop navbar
+  - Removed from mobile menu
+  - Users create topics within faculty context
+- Profile edit form:
+  - Replaced free-form university input with dropdown menu
+  - Added faculty field with cascading filtering
+  - Existing university values become undefined
+- Updated project structure in README.md
+- Updated database setup instructions (3 new migrations)
+
+### Fixed
+- Display of academic information on profile (now shows all data)
+- TypeScript types for extended profile with university_id and faculty_id
+- Testimonials use only real faculties from database
+
+### Removed
+- Admin category management (categories are now permanent)
+  - Removed from admin navigation
+  - Removed entire `/admin/categories` route
+  - Removed "Quick Actions" sections from admin panel
+
+---
+
 ## Summary Statistics
 
-- **Total Commits:** 241
-- **Development Period:** November 5, 2025 - December 13, 2025 (38 days)
+- **Total Commits:** 250+
+- **Development Period:** November 5, 2025 - December 21, 2025 (46 days)
 - **Major Versions:** 3 (V0, V1, V2)
-- **Minor Versions:** 10
+- **Minor Versions:** 11
 - **Patch Versions:** 1
 - **Primary Tech Stack:** Next.js, TypeScript, Supabase, Tailwind CSS
-- **Key Features:** Forum system, gamification, AI assistant (removed), content moderation, mobile-first design
+- **Key Features:** Hierarchical forum (universities/faculties), gamification, content moderation, mobile-first design
 
 ---
 
@@ -376,7 +431,8 @@ This document tracks the chronological changes throughout the **Skripta** (Stude
 | Dec 7, 2025 | V2.0.0 | Complete authentication system |
 | Dec 11, 2025 | V2.2.0 | Gamification system launched |
 | Dec 12, 2025 | V2.4.0 | AI assistant (later removed) |
-| Dec 13, 2025 | V2.5.1 | Current version |
+| Dec 13, 2025 | V2.5.1 | Registration polish |
+| Dec 21, 2025 | V2.6.0 | Current version - Hierarchical forum |
 
 ---
 
@@ -390,4 +446,4 @@ This project follows [Semantic Versioning](https://semver.org/):
 
 ---
 
-*Last Updated: December 13, 2025*
+*Last Updated: December 21, 2025*
